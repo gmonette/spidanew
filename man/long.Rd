@@ -25,6 +25,8 @@ if \code{idvar} exists in \code{data}.}
 \item{expand}{(default TRUE): if 'time' values are inconsistent, fill in missing 'time's with NAs.}
 
 \item{safe_sep}{temporary safe? separator}
+
+\item{...}{additional parameters are passed to \code{\link{reshape}}.}
 }
 \value{
 'long' file with each wide row repeated as many times as there are distinct values for the 'timevar' variable.

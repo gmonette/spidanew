@@ -22,6 +22,7 @@
 #'        if \code{idvar} exists in \code{data}.
 #' @param expand (default TRUE): if 'time' values are inconsistent, fill in missing 'time's with NAs.
 #' @param safe_sep temporary safe? separator
+#' @param ... additional parameters are passed to \code{\link{reshape}}.
 #' @return 'long' file with each wide row repeated as many times as there are distinct values for the 'timevar' variable.
 #' @examples
 #' z <- data.frame(id =letters[1:10], id2= 11:20, v_L = 1:10, v_R = 11:20)

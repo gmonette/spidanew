@@ -4,9 +4,11 @@
 #' for longitudinal and hierarchical data analysis.
 #'
 #' @section Functions:
-#' * long
-#' * pch
-#' * lty
+#'
+#' \code{\link{long}} is an attempt to simplify the functions 'long' and 'tolong'
+#' in spida which, in turn, are attempts at simplifying calls to
+#' \code{\link{stats::reshape}}
+#'
 #' @docType package
 #' @name spidanew
 NULL

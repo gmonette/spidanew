@@ -16,7 +16,8 @@ Variable names with this separator are transformed to long variables.}
 \item{timevar}{(default 'time') names of variable in long file to identify occasions. Its values are taken from the suffix following
 the 'sep' character in each time-varying variable.}
 
-\item{idvar}{(default: 'id') variable name in wide file to identify source row in wide file. Its values must be unique for each row.}
+\item{idvar}{(default: 'id') variable name used in output to identify row in input file. It may exist in the input (wide) file and must, in that case,
+have a unique value in each row. If not, its values are replaced with row numbers.}
 
 \item{ids}{(default \code{1:nrow(data)}) values for idvar in long file if the variable 'idvar' does not exist in in the wide file. Ignored
 if \code{idvar} exists in \code{data}.}

@@ -1,15 +1,24 @@
-#' Create a longitudinal file from a wide file
+#' Create a long file from a wide file
 #'
-#' Uses a minimal set of arguments to create a long file using \link{\code{stats::reshape}}.
+#' Uses a minimal number  of arguments to create a long file using \code{stats::\link{reshape}}. Produces output even when long variable names and time values are not fully crossed.
+#'
+#' \code{long} is intended for the simple case in which 'wide' variables in the input data frame are identified
+#' by the fact that they contain a separator character that separates the name of the variable in the long file from
+#' the value of the 'time' variable that identifies the corresponding row in the long file, e.g \code{x_1, x_2, x_3} or
+#' \code{brain.volume_left, brain.volume_right}.  If the separator ('_' by default) occurs in other variables, it must
+#' be temporarily substituted.
+#'
+#' \code{\link{rehape}} does not work if long variable names and time values are not fully crossed, e.g \code{x_1, x_2, x_3, y_1, y_2}. By default \code{long}
+#' creates additional variables with "NAs" so the set of variables given to \code{\link{reshape}} is fully crossed, e.g. adding a variable \code{y_3 <- NA}.
 #'
 #' @param data wide data frame
 #' @param sep (default '_') single character separator between long names and 'time' value.
 #'        Variable names with this separator are transformed to long variables.
-#' @param timevar (default 'time') names of variable in long file to identify occasions. Its values are taken from the suffix following
+#' @param timevar (default 'time') names of variable in output long file to identify occasions. Its values are taken from the suffix following
 #'        the 'sep' character in each time-varying variable.
-#' @param idvar  (default: 'id') variable name used in output to identify row in input file. It may exist in the input (wide) file and must, in that case,
+#' @param idvar  (default: 'id') variable name used in output long to identify row in input wide file. It may exist in the input wide file and must, in that case,
 #'        have a unique value in each row. If not, its values are replaced with row numbers.
-#' @param ids  (default \code{1:nrow(data)}) values for idvar in long file if the variable 'idvar' does not exist in in the wide file. Ignored
+#' @param ids  (default \code{1:nrow(data)}) values for idvar in long file if the variable \code{idvar} does not exist in in the input wide file. Ignored
 #'        if \code{idvar} exists in \code{data}.
 #' @param expand (default TRUE): if 'time' values are inconsistent, fill in missing 'time's with NAs.
 #' @param safe_sep temporary safe? separator
@@ -74,4 +83,5 @@ long <- function (data, sep = "_",  timevar = 'time',
 #  # unbalanced times
 #  z <- data.frame(id =letters[1:10], id2= 11:20, v_L = 1:10, v_R = 11:20, z_L = 21:30)
 #  long(z,idvar='rowid')
-
+#
+#  reshape(direction= 'long', z, sep = '_', v.names= 'v') # does not work

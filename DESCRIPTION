@@ -1,10 +1,10 @@
 Package: spidanew
 Type: Package
-Title: New Functions for the Package
+Title: New Functions for the spida Package
 Version: 0.1
 Date: 2015-11-16
 Author: Georges Monette
 Maintainer: <georges@yorku.ca>
-Description: New functions before integration into
+Description: New functions before integration into 'spida'
 License: GNU GPL
 LazyData: TRUE

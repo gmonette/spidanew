@@ -5,9 +5,9 @@
 #'
 #' @param ... expressions that can evaluate to character strings to paste. Note that the separator
 #' for pasting is '' to allow expressions within quotes.
-#' @param envir (default = parent.frame()) see \link{\code{eval}}.
-#' @param enclos (default same as \link{\code{eval}})
-#' @param try (default TRUE) enclose the expression in \link{\code{try}}.
+#' @param envir (default = parent.frame()) see \code{\link{eval}}.
+#' @param enclos (default same as \code{\link{eval}})
+#' @param try (default TRUE) enclose the expression in \code{\link{try}}.
 #' @return the result of evaluating \code{paste(...,sep='')} as an expression
 #' @examples
 #' run('ls()')

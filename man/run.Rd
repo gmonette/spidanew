@@ -11,11 +11,11 @@ run(..., envir = parent.frame(), enclos = if (is.list(envir) ||
 \item{...}{expressions that can evaluate to character strings to paste. Note that the separator
 for pasting is '' to allow expressions within quotes.}
 
-\item{envir}{(default = parent.frame()) see \link{\code{eval}}.}
+\item{envir}{(default = parent.frame()) see \code{\link{eval}}.}
 
-\item{enclos}{(default same as \link{\code{eval}})}
+\item{enclos}{(default same as \code{\link{eval}})}
 
-\item{try}{(default TRUE) enclose the expression in \link{\code{try}}.}
+\item{try}{(default TRUE) enclose the expression in \code{\link{try}}.}
 }
 \value{
 the result of evaluating \code{paste(...,sep='')} as an expression

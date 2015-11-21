@@ -2,6 +2,10 @@
 
 export("%less%")
 export(.onLoad)
+export(fillin)
+export(gpanel.band)
+export(gpanel.fit)
+export(gpanel.labels)
 export(long)
 export(lty)
 export(pch)

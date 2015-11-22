@@ -908,11 +908,13 @@ print.cat <- function(object,...) {
 #' consisting of an expression that would, if used as the \code{fmla} argument
 #' to \code{Lform} would generate the full design matrix for the linear model.
 #'
-#' If \code{Lform} is call with two or three arguments, it generates a
+#' If \code{Lform} is called with two or three arguments, it generates a
 #' hypothesis matrix by evaluating the expressions in \code{form} in the
 #' environment \code{data}. The function \code{M} is designed to facilitate the
 #' generation of blocks of the hypothesis matrix corresponding to main effects
-#' or interaction effects of factors.  \verb{ Creates a linear hypothesis
+#' or interaction effects of factors.
+#'
+#' \verb{ Creates a linear hypothesis
 #' matrix, i.e. an L matrix, using formulas evaluated in 'data' for each column
 #' of the L matrix. This approach lends itself to creating hypotheses and
 #' estimates based on data such as partial derivatives with respect to

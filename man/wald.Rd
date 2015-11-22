@@ -27,7 +27,8 @@ these}
 
 \item{clevel}{level for confidence intervals}
 
-\item{data}{used for 'data' attribute of value returned}
+\item{data}{data frame used as 'data' attribute fot list elements returned only if
+the corresonding element of \code{Llist} has a NULL data attribute}
 
 \item{debug}{(default FALSE) produce verbose information}
 
@@ -35,7 +36,7 @@ these}
 variance-covariance matrix is returned}
 
 \item{full}{if TRUE, the hypothesis matrix is the model matrix for
-\code{fit} such that the estimated coefficients are the predicted values for
+ \code{fit} such that the estimated coefficients are the predicted values for
 the fixed portion of the model. This is designed to allow the calculation of
 standard errors for models for which the \code{predict} method does not
 provide them.}

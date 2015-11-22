@@ -159,7 +159,7 @@
 #'  main= 'Increase in predicted mathach per unit increase in ses')
 #'
 #' @export
-wald <- function(fit, Llist = "",clevel=0.95,
+wald <- function(fit, Llist = "", clevel = 0.95,
                  data = NULL, debug = FALSE , maxrows = 25,
                  full = FALSE, fixed = FALSE,
                  invert = FALSE, method = 'svd',
@@ -344,6 +344,10 @@ wald <- function(fit, Llist = "",clevel=0.95,
   attr(ret,"class") <- "wald"
   ret
 }
+
+# Test
+
+
 
 #' @describeIn wald experimental version with RHS?
 #' @export

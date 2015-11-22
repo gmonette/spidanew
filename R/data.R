@@ -36,8 +36,6 @@
 #'   xqplot( up( hsfull, ~ school) )
 #' }
 "hsfull"
-#' @describeIn hsfull subset of 40 schools from hsfull
-"hs"
 #' Longitudinal study of IQ after traumatic brain injuries
 #'
 #' A subset of data gathered on
@@ -57,5 +55,5 @@
 #'    \item{\code{VIQ}}{verbal IQ}
 #'  }
 #' @references Wong, Monette, Wiener COMPLETE
-#' @keyword datasets
+#' @keywords datasets
 "iq"

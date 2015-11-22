@@ -346,8 +346,16 @@ wald <- function(fit, Llist = "", clevel = 0.95,
 }
 
 # Test
-
-
+if(FALSE){
+library(nlme)
+fit <- lme(mathach ~ ses * Sex * Sector, hs, random = ~ 1|school)
+summary(fit)
+pred <- expand.grid( ses = seq(-2,2,1), Sex = levels(hs$Sex), Sector = levels(hs$Sector))
+pred
+wald(fit,model.matrix(fit,data=pred))
+model.matrix(fit,data = pred)
+model.matrix(~ ses * Sex * Sector,data=pred)
+}
 
 #' @describeIn wald experimental version with RHS?
 #' @export
@@ -1532,4 +1540,27 @@ wald.transform <- function (x, fun, label = "Transformed coefficients") {
 #' @export
 glh <- function( ...) wald( ...)    # previous name for 'wald' function
 
+#' Design matrix for a fit possibly on a new data frame
+#'
+#' This function return the X matrix for a fit possibly based on a different data frame than the model
+#'
+#' @param fit a fitted object with formula method
+#' @param data (default NULL) a data frame on which to evaluate the design matrix
+#' @return a design matrix
+#' @export
+getX <- function(fit, data = getData(fit)) {
+  f <- formula(fit)
+  if(length(f) == 3) f <- f[-2]
+  model.matrix(f, data = data)
+}
 
+if(FALSE){ #TESTS:
+  library(nlme)
+  fit <- lme(mathach ~ ses * Sex * Sector, hs, random = ~ 1|school)
+  summary(fit)
+  getX(fit)
+  pred <- expand.grid( ses = seq(-2,2,1), Sex = levels(hs$Sex), Sector = levels(hs$Sector))
+  pred
+  getX(fit,pred)
+  wald(fit,getX(fit,data=pred))
+}

@@ -15,6 +15,13 @@ getX(fit, data = getData(fit))
 a design matrix
 }
 \description{
-This function return the X matrix for a fit possibly based on a different data frame than the model
+This function return the X matrix for a fit possibly based on a different data frame than the model.
+It performs a function very close to that of \code{\link{model.matrix}} except that \code{\link{model.matrix}}
+expects the variable for the LHS of the formula to be in the data set, ostensibly in order to remove rows
+for which the LHS variable(s) are NA. In addition, \code{getX} attaches the argument data set as an attribute.
+}
+\details{
+Extending \code{getX} to new classes merely requires a \code{\link{getData}} method. The \code{\link{formula}}
+method is also used but usually already exitsts.
 }
 

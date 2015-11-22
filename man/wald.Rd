@@ -61,68 +61,32 @@ An object of class \code{wald}, with the following components:
     COMPLETE
 }
 \description{
+General Linear Hypothesis with Wald test for lm, glm, lme, nlme and
+lmer objects.  Can be extended to other objects (e.g.) 'glm' by writing
+'getFix.glm'
+}
+\details{
 Tests a general linear hypothesis for the linear fixed portion of a model.
 The hypothesis can be specified in a variety of ways such as a hypothesis
 matrix or a pattern that is used as a regular expression to be matched with
 the names of coefficients of the model. A number of tools are available to
 facilitate the generation of hypothesis matrices.
-}
-\details{
-General Linear Hypothesis with Wald test for lm, glm, lme, nlme and
-lmer objects.  Can be extended to other objects (e.g.) 'glm' by writing
-'getFix.glm'
 
 Usage:
 
-wald ( fit, L ) where L is a hypothesis matrix
+wald(fit, L) where L is a hypothesis matrix
 
-wald ( fit, 'pat' ) where 'pat' a regular expression (see ?regex) used to
+wald(fit, 'pat') where 'pat' a regular expression (see ?regex) used to
 match names of coefficients of fixed effects.  e.g. wald( fit, ':.*:') tests
 all 2nd and higher order interactions.
 
-wald ( fit, c(2,5,6)) to test 2nd, 5th and 6th coefficients.
+wald(fit, c(2,5,6)) to test 2nd, 5th and 6th coefficients.
 
-wald ( fit, list( hyp1= c(2,5,6), H2 = 'pat')) for more than one hypothesis
+wald(fit, list( hyp1= c(2,5,6), H2 = 'pat')) for more than one hypothesis
 matrix
 
-There are number of functions to help construct hypothesis matrices:
-
-Lform ( fit, list(expr1, expr2, ..., exprk), data = dframe) creates an L
-matrix by evaluating expr1, expr2, ..., exprk in the dframe environment to
-generate the k columns of the L matrix. 'dframe' is model.frame(fit) by
-default. See the example below to estimate a derivative.
-
-Creates an L matrix using formulas evaluated in 'data' for each column of
-the L matrix Example:
-
-library(car) fit <- lm( income ~ (education + I(education^2) )* type,
-Prestige) summary(fit)
-
-. . .  Coefficients: Estimate Std. Error t value Pr(>|t|) (Intercept) 891.3
-23889.1 0.037 0.97032 education 210.0 5638.8 0.037 0.97037 I(education^2)
-38.3 328.3 0.117 0.90740 typeprof 191523.2 63022.0 3.039 0.00312 ** typewc
-25692.3 73888.0 0.348 0.72887 education:typeprof -28133.0 10236.0 -2.748
-0.00725 ** education:typewc -4485.4 14007.9 -0.320 0.74956
-I(education^2):typeprof 1017.5 451.8 2.252 0.02679 * I(education^2):typewc
-170.9 671.6 0.255 0.79967 . . .
-
-# estimate the marginal value of education for each # occupation in the data
-set
-
-L <- list( 'marginal value of education' =Lform( fit, form = list(0, 1, 2 *
-education, 0, 0, type == 'prof', type == 'wc', 2 * education * (type ==
-'prof'), 2 * education * (type == 'wc')), data = Prestige)) wald( fit, L )
-chat <- coef( wald( fit, L ), se = 2) xyplot( coef +coefp+coefm ~ education
-| type, cbind(Prestige,chat)[order(Prestige$education),], type = 'l')
-xyplot( chat~ education | type, Prestige)
-
-# This approach can be used to predict responses with a fitting method that
-has a # 'model.matrix' method but does not have a 'predict' method or does
-not return # estimated standard errors with its 'predict' method.
-
-datafit <- model.frame(fit) # or just the data frame used for the fit ww <-
-wald(fit, model.matrix(fit)) datafit <- cbind(datafit, coef(ww, se =2)) #
-...etc as above
+There are number of functions to help construct hypothesis matrices. See in
+particular \code{\link{Lfx}}.
 
 # To extend the 'wald' function to a new class of objects, one needs to
 write a 'getFix' # method to extract estimated coefficients, their estimated
@@ -159,7 +123,7 @@ library( nlme )
   summary(fit)
   pred <- expand.grid( ses = seq(-2,2,.1), Sex = levels(hs$Sex), Sector = levels(hs$Sector))
   pred
-  w <- wald(fit, getX(fit,data=pred), data = pred) # attaches data to wald.object so it can included in data frame
+  w <- wald(fit, getX(fit,data=pred)) # attaches data to wald.object so it can included in data frame
   w
   w <- as.data.frame(w)
   head(w)
@@ -193,10 +157,11 @@ REFERENCES HERE
 }
 \seealso{
 \code{\link{Lform}}, \code{\link{xlevels}}, \code{\link{dlevels}},
-\code{\link{Lall}},\code{\link{Lc}},\code{\link{Lequal}},
-\code{\link{Ldiff}},\code{\link{Lmu}},\code{\link{Lmat}},\code{\link{Lrm}},
-\code{\link{Leff}}, \code{\link{as.data.frame.wald}}. To extend to new
-models see \code{\link{getFix}}. To generate hypothesis matrices for general
-splines see \code{\link{gsp}} and \code{\link{sc}}.
+         \code{\link{Lfx}}, \code{\link{getX}}, \code{\link{M}},
+         \code{\link{Lall}},\code{\link{Lc}},\code{\link{Lequal}},
+         \code{\link{Ldiff}},\code{\link{Lmu}},\code{\link{Lmat}},\code{\link{Lrm}},
+         \code{\link{Leff}}, \code{\link{as.data.frame.wald}}. To extend to new
+         models see \code{\link{getFix}}. To generate hypothesis matrices for general
+         splines see \code{\link{gsp}} and \code{\link{sc}}.
 }
 

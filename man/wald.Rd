@@ -149,10 +149,28 @@ ret$fixed <- fit$qbar ret$vcov <- fit$t ret$df <- fit$df ret }
 \item \code{glh}: same as \code{wald}, kept for backward compatibility
 }}
 \examples{
-library(spida)
 data(hs)
 library( nlme )
-fit <- lme( mathach ~ (ses + I(ses^2)) * Sex, hs, random = ~ 1 + ses | school)
+
+###
+### Using wald to create and plot a data frame with predicted values
+###
+  fit <- lme(mathach ~ (ses+I(ses^2)) * Sex * Sector, hs, random = ~ 1|school)
+  summary(fit)
+  pred <- expand.grid( ses = seq(-2,2,.1), Sex = levels(hs$Sex), Sector = levels(hs$Sector))
+  pred
+  w <- wald(fit, getX(fit,data=pred), data = pred) # attaches data to wald.object so it can included in data frame
+  w
+  w <- as.data.frame(w)
+  head(w)
+  library(latticeExtra)
+  xyplot(coef ~ ses | Sector, w, groups = Sex,
+     auto.key = T, type = 'l',
+     fit = w$coef,
+     upper = with(w,coef+2*se),
+     lower = with(w,coef-2*se),
+     subscript = T) +
+     glayer( gpanel.fit(...))
 
 wald( fit, 'Sex')  # sig. overall effect of Sex
 wald( fit, ':Sex') # but no evidence of interaction with ses

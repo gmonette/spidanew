@@ -40,8 +40,20 @@ in each row of \code{data} to form element(s) of the corresponding row of
 factors.}
 }
 \description{
+Lfx facilitates generating linear hypothesis matrices for complex models by using \code{M}
+objects to easily generate portions of hypothesis matrices for complex models.
+}
+\details{
 Creates an L matrix using expressions evaluated in \code{data} for each
-column or multi-column term of the L matrix
+column or multi-column term of the L matrix. For example, letting \code{fac} be a factor, \code{fac0}, the same factor
+in a different order
+and \code{x} a numerical variable:
+\itemize{
+ \item{factor prediction: \code{M(fac)}}
+ \item{factor pairwise differences: \code{M(fac) - M(fac0)}}
+ \item{interaction terms: \code{M(x) * M(fac0)}}
+ \item{zero block of the correct size: \code{0 * M(fac)}}
+}
 }
 \examples{
 ##

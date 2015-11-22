@@ -592,43 +592,103 @@ print.wald <- function(x,round = 6, pround = 5,...) {
 }
 #' Transform output of a Wald test into a data frame
 #'
-#' @param obj
-#' @param se
-#' @return a data frame with estimated coefficients, standard error and optionally, variables from a data frame.
-#' @author GM
+#' The generic method is included in the possibly false hope that it will ensure that the method
+#' in this package is used.
+#'
+#' @param obj a 'wald' object
+#' @param se a vector with the multiples of standard error used to generate lower and upper limits. 'names(se)'
+#'        is appended to 'L' and 'U' to label the variables.
+#' @param which selects elements of 'obj' to turn to a data.frame.
+#' @return A data frame with estimated coefficient, standard error, and, optionally, upper and lower limits and
+#'         the variables included the 'data' element of 'obj' if present.
+#'         If \code{length(which) > 1}, the returned object is a list of data frames.
 #' @examples
-#' # coming soon
+#' # coming soon!
 #' @export
-as.data.frame.wald <- function( obj, se , digits = 3 , sep = "" , which = 1 ) {
+as.data.frame.wald <- function(obj, se = 2, digits = 3, sep = "", which = 1) {
   # modified by GM 2010_09_20 to avoid problems with coefs with duplicate rownames
-  dataf <- function(x,...) {
+  dataf <- function(x, ...) {
     x <- cbind(x)
     rn <- rownames(x)
-    if( length( unique(rn)) < length(rn)) rownames(x) <- NULL
-    data.frame(x,...)
+    if(length(unique(rn)) < length(rn)) rownames(x) <- NULL
+    data.frame(x, ...)
   }
-  obj = obj [which]
-  if ( length(obj) == 1) {
+  obj = obj[which]
+  if (length(obj) == 1) { # e.g. is length(which) > 1
     cf <- obj[[1]]$coef
-    ret <- if ( missing(se)) data.frame( coef = cf, se = obj[[1]]$se)
-    else {
-       if ( is.null( names(se))) names(se) <-
-                     sapply(se,function(x) as.character(round(x,digits)))
-       SE <- obj[[1]]$se
-       SEmat <- cbind(SE) %*% rbind(se)
-       cplus <- cf + SEmat
-       cminus <- cf - SEmat
-       colnames(cplus) <- paste( "U",colnames(cplus),sep=sep)
-       colnames(cminus) <- paste( "L",colnames(cminus),sep=sep)
-       ret <- data.frame( coef = cf)
-       ret <- cbind( ret, cplus, cminus)
-    }
-    if( is.null(dd <- obj[[1]]$data)) return( ret)
-    else return( cbind(ret, dd))
+    ret <- data.frame(coef = cf, se = obj[[1]]$se)
+    if(is.null(names(se))) names(se) <-
+                 sapply(se, function(x) as.character(round(x, digits)))
+    SE <- obj[[1]]$se
+    SEmat <- cbind(SE) %*% rbind(se)
+    cplus <- cf + SEmat
+    cminus <- cf - SEmat
+    colnames(cplus) <- paste("U",colnames(cplus),sep=sep)
+    colnames(cminus) <- paste("L",colnames(cminus),sep=sep)
+    ret <- cbind(ret, cplus, cminus)
+
+    if(is.null(dd <- obj[[1]]$data)) return(ret)
+    else return(cbind(ret, dd))
   }
   else ret <- lapply( obj, as.data.frame.wald)
   ret
 }
+#' Wald function producing a data frame for graphing
+#'
+#' A version of the wald function that produces a data frame directly, analogously to \code{as.data.frame(wald(...))}
+#'
+#' @inheritParams wald
+#' @param se a vector with the multiples of standard error used to generate lower and upper limits. 'names(se)'
+#'        is appended to 'L' and 'U' to label the variables.
+#' @param which selects elements of 'obj' to turn to a data.frame.
+#' @return A data frame with estimated coefficient, standard error, and, optionally, upper and lower limits and
+#'         the variables included the 'data' element of 'obj' if present.
+#'         If \code{length(which) > 1}, the returned object is a list of data frames.
+#' @examples
+#' data(hs)
+#' library( nlme )
+#'
+#' ###
+#' ### Using walddf to create and plot a data frame with predicted values
+#' ###
+#' \dontrun{
+#'   fit <- lme(mathach ~ (ses+I(ses^2)) * Sex * Sector, hs, random = ~ 1|school)
+#'   summary(fit)
+#'   pred <- expand.grid( ses = seq(-2,2,.1), Sex = levels(hs$Sex), Sector = levels(hs$Sector))
+#'   head(pred)
+#'   w <- walddf(fit, getX(fit,data=pred)) # attaches data to wald.object so it can included in data frame
+#'   head(w)
+#'   library(latticeExtra)
+#'   xyplot(coef ~ ses | Sector, w, groups = Sex,
+#'      auto.key = T, type = 'l',
+#'      fit = w$coef,
+#'      upper = with(w,coef+2*se),
+#'      lower = with(w,coef-2*se),
+#'      subscript = T) +
+#'      glayer( gpanel.fit(...))
+#'
+#' wald( fit, 'Sex')  # sig. overall effect of Sex
+#' wald( fit, ':Sex') # but no evidence of interaction with ses
+#' wald( fit, '\\^2') # nor of curvature
+#' }
+#' @export
+walddf <- function(fit, Llist = "", clevel = 0.95,
+                 data = NULL, debug = FALSE ,
+                 full = FALSE, fixed = FALSE,
+                 invert = FALSE, method = 'svd',
+                 df = NULL,
+                 se = 2, digits = 3, sep = '') {
+  obj <- wald(fit = fit, Llist = Llist, clevel = clevel,
+              data = data, debug = debug ,
+              full = FALSE, fixed = FALSE,
+              invert = FALSE, method = 'svd',
+              df = NULL)
+  ret <- spidanew:::as.data.frame.wald(obj,
+              se = se, digits = digits,
+              sep = sep)
+  ret
+}
+
 #' Extract coefficients from Wald object
 #'
 #' @param obj wald object
@@ -1231,8 +1291,6 @@ Lc <- function(fit, nam, ref = 1, verbose = 0) {
        attr(Lret,"heading") <- paste("Comparisons with reference level:", rownames(L)[refind])
        Lret
 }
-
-
 
 #' Construct hypothesis matrix to test repeated measures factor effects
 #'

@@ -4,23 +4,27 @@
 \alias{as.data.frame.wald}
 \title{Transform output of a Wald test into a data frame}
 \usage{
-\method{as.data.frame}{wald}(obj, se, digits = 3, sep = "", which = 1)
+\method{as.data.frame}{wald}(obj, se = 2, digits = 3, sep = "",
+  which = 1)
 }
 \arguments{
-\item{obj}{}
+\item{obj}{a 'wald' object}
 
-\item{se}{}
+\item{se}{a vector with the multiples of standard error used to generate lower and upper limits. 'names(se)'
+is appended to 'L' and 'U' to label the variables.}
+
+\item{which}{selects elements of 'obj' to turn to a data.frame.}
 }
 \value{
-a data frame with estimated coefficients, standard error and optionally, variables from a data frame.
+A data frame with estimated coefficient, standard error, and, optionally, upper and lower limits and
+        the variables included the 'data' element of 'obj' if present.
+        If \code{length(which) > 1}, the returned object is a list of data frames.
 }
 \description{
-Transform output of a Wald test into a data frame
+The generic method is included in the possibly false hope that it will ensure that the method
+in this package is used.
 }
 \examples{
-# coming soon
-}
-\author{
-GM
+# coming soon!
 }
 

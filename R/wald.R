@@ -1557,7 +1557,7 @@ getX <- function(fit, data = getData(fit)) {
   f <- formula(fit)
   if(length(f) == 3) f <- f[-2]
   ret <- model.matrix(f, data = data)
-  attr(ret,'data') <- data
+  attr(ret,'data') <- data #include data as attribute
   ret
 }
 # if(FALSE){ #TESTS:

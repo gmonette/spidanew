@@ -744,9 +744,6 @@ as.data.frame.wald <- function(obj, se = 2, digits = 3, sep = "", which = 1) {
 #'      layer(panel.abline(a=0,b=0,lwd = 1, color ='black'))
 #'
 #'
-
-
-
 #' }
 #' @export
 walddf <- function(fit, Llist = "", clevel = 0.95,

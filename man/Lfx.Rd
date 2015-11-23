@@ -42,10 +42,17 @@ factors.}
 \description{
 Lfx facilitates generating linear hypothesis matrices for complex models by using \code{M}
 objects to easily generate portions of hypothesis matrices for complex models.
+\code{Lfx(fit)} with no other arguments returns a list that is easy to edit to
+differentiate with respect to numeric variables.
 }
 \details{
 Creates an L matrix using expressions evaluated in \code{data} for each
-column or multi-column term of the L matrix. For example, letting \code{fac} be a factor, \code{fac0}, the same factor
+column or multi-column term of the L matrix. Differentiating with respect
+to numeric variables is easy.  Generating pairwise differences between factor levels
+requires the intermediate step of creating a data frame with crossing factors to be difference with
+differently named versions of themselves.
+
+For example, letting \code{fac} be a factor, \code{fac0}, the same factor
 in a different order
 and \code{x} a numerical variable:
 \itemize{

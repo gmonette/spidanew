@@ -5,9 +5,13 @@
 \alias{gpanel.band}
 \alias{gpanel.fit}
 \alias{gpanel.labels}
+\alias{panel.fit}
 \title{Panel functions for predicted values and SE bands}
 \usage{
 gpanel.fit(x, y, fit, lower, upper, subscripts, ..., type, group.number, alpha,
+  col, col.line, col.symbol, border = F, font, fontface)
+
+panel.fit(x, y, fit, lower, upper, subscripts, ..., type, group.number, alpha,
   col, col.line, col.symbol, border = F, font, fontface)
 
 gpanel.band(x, y, fit, lower, upper, subscripts, ..., type, group.number, alpha,
@@ -69,7 +73,7 @@ The 'panel.bands', 'panel.fit', and 'panel.labels' functions are
 \description{
 Panel functions for predicted values and SE bands using 'layer' and 'glayer' in the package latticeExtra
 
-gpanel.labels shows all labels, for selected labels see the examples with
+gpanel.labels: shows all labels, for selected labels see the examples with
 \code{\link{trellis.focus}} and \code{\link{panel.identify}}:
      trellis.focus()
      panel.identify(labels = rownames(data),rot=-15,col = col.symbol, etc.)
@@ -81,14 +85,17 @@ confidence or prediction bands that have a reasonable appearance whether a plot 
 }
 \section{Functions}{
 \itemize{
-\item \code{gpanel.band}: 
+\item \code{panel.fit}: to be used with 'layer' -- but, actually, identical to 'glayer'
+
+\item \code{gpanel.band}: identical to gpanel.fit but kept for backward compatibility
 
 \item \code{gpanel.labels}: 
 
 \item \code{fillin}: 
 }}
 \examples{
-library(spida)
+\dontrun{
+  library(spida)
   library(spidanew)
   library(latticeExtra)
   library(car)
@@ -171,11 +178,9 @@ library(spida)
                  auto.key = list(space='right', lines= T, cex = 1.5)))
 
   p + glayer(gpanel.fit(...))
-  \dontrun{
   trellis.focus()
   panel.identify(labels= z$occupation)
   trellis.unfocus()
-  }
   z$type2 <- with( z, reorder(type,education, mean, na.rm=T))
   gd(3)
   (p <-  xyplot( income ~ education| type2, z, groups = gender,
@@ -188,11 +193,9 @@ library(spida)
                  auto.key = list(space='right', lines= T, cex = 1.5)))
 
   p + glayer( gpanel.fit(...))
-  \dontrun{
   trellis.focus()
   panel.identify(labels= z$occupation)
   trellis.unfocus()
-  }
 
   ###
   ### With panels^2
@@ -220,6 +223,7 @@ library(spida)
 
   p + layer( gpanel.fit(...))
   p + layer( gpanel.fit(..., col = 'black', alpha = .1)) + layer(gpanel.text(...))
+}
 }
 \author{
 Georges Monette <georges@yorku.ca>

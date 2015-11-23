@@ -37,6 +37,7 @@
 #'         invoked for their graphical effect.
 #' @author Georges Monette <georges@@yorku.ca>
 #' @examples
+#' \dontrun{
 #'   library(spida)
 #'   library(spidanew)
 #'   library(latticeExtra)
@@ -120,11 +121,9 @@
 #'                  auto.key = list(space='right', lines= T, cex = 1.5)))
 #'
 #'   p + glayer(gpanel.fit(...))
-#'   \dontrun{
 #'   trellis.focus()
 #'   panel.identify(labels= z$occupation)
 #'   trellis.unfocus()
-#'   }
 #'   z$type2 <- with( z, reorder(type,education, mean, na.rm=T))
 #'   gd(3)
 #'   (p <-  xyplot( income ~ education| type2, z, groups = gender,
@@ -137,11 +136,9 @@
 #'                  auto.key = list(space='right', lines= T, cex = 1.5)))
 #'
 #'   p + glayer( gpanel.fit(...))
-#'   \dontrun{
 #'   trellis.focus()
 #'   panel.identify(labels= z$occupation)
 #'   trellis.unfocus()
-#'   }
 #'
 #'   ###
 #'   ### With panels^2
@@ -169,7 +166,7 @@
 #'
 #'   p + layer( gpanel.fit(...))
 #'   p + layer( gpanel.fit(..., col = 'black', alpha = .1)) + layer(gpanel.text(...))
-#'
+#' }
 #' @export
 gpanel.fit <-
   function(x, y, fit, lower, upper,
@@ -202,12 +199,15 @@ gpanel.fit <-
       panel.polygon( c(dd$x, rev(dd$x)),c(dd$upper, rev(dd$lower)),
                      border = border, col = col, alpha = alpha,...)
     }
-      #  panel.polygon(c(dd$x, rev(dd$x)), c(dd$upper, rev(dd$lower)), col = col, alpha = alpha, ...)
+    #  panel.polygon(c(dd$x, rev(dd$x)), c(dd$upper, rev(dd$lower)), col = col, alpha = alpha, ...)
   }
-#' @describeIn gpanel.fit
+#' @describeIn gpanel.fit to be used with 'layer' -- but, actually, identical to 'glayer'
+#' @export
+panel.fit <- gpanel.fit
+#' @describeIn gpanel.fit identical to gpanel.fit but kept for backward compatibility
 #' @export
 gpanel.band <- gpanel.fit
-#' gpanel.labels shows all labels, for selected labels see the examples with
+#' gpanel.labels: shows all labels, for selected labels see the examples with
 #' \code{\link{trellis.focus}} and \code{\link{panel.identify}}:
 #'      trellis.focus()
 #'      panel.identify(labels = rownames(data),rot=-15,col = col.symbol, etc.)

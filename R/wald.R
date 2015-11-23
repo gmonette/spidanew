@@ -662,14 +662,91 @@ as.data.frame.wald <- function(obj, se = 2, digits = 3, sep = "", which = 1) {
 #'   xyplot(coef ~ ses | Sector, w, groups = Sex,
 #'      auto.key = T, type = 'l',
 #'      fit = w$coef,
-#'      upper = with(w,coef+2*se),
-#'      lower = with(w,coef-2*se),
+#'      upper = w$L,
+#'      lower = w$U,
+#'      xlim = c(0,2),
 #'      subscript = T) +
 #'      glayer( gpanel.fit(...))
+#'   wald(fit, 'ses')
+#'   wald( fit, 'Sex')  # sig. overall effect of Sex
+#'   wald( fit, ':Sex') # but no evidence of interaction with ses
+#'   wald( fit, '\\^2') # nor of curvature
 #'
-#' wald( fit, 'Sex')  # sig. overall effect of Sex
-#' wald( fit, ':Sex') # but no evidence of interaction with ses
-#' wald( fit, '\\^2') # nor of curvature
+#'   # conditional effect of ses
+#'   head(getX(fit))
+#'
+#'   ###
+#'   ###  Effect of ses: Differentiating with respect to ses
+#'   ###
+#'
+#'   L <- Lfx(fit, list(
+#'          0,
+#'          1,
+#'          2 * ses,
+#'          0 * M(Sex),
+#'          0 * M(Sector),
+#'          1 * M(Sex),
+#'          2 * ses * M(Sex),
+#'          1 * M(Sector),
+#'          2 * ses * M(Sector),
+#'          0 * M(Sex) * M(Sector),
+#'          1 * M(Sex) * M(Sector),
+#'          2 * ses * M(Sex) * M(Sector)),
+#'          pred)
+#'   head(wald(fit, L), 20)
+#'   w <- walddf(fit, L)
+#'   xyplot(coef ~ ses | Sector, w, groups = Sex,
+#'      auto.key = list(columns = 2, lines = T),
+#'      type = 'l',
+#'      fit = w$coef,
+#'      upper = w$L,
+#'      lower = w$U,
+#'      xlim = c(0,2),
+#'      ylab = 'estimate change in mathach per unit increase in ses',
+#'      subscripts = T) +
+#'      glayer( gpanel.fit(...)) +
+#'      layer(panel.abline(a=0,b=0,lwd = 1, color ='black'))
+#'
+#'   ###
+#'   ###  Difference in effect of ses between Sectors
+#'   ###
+#'
+#'   pred.d <- expand.grid( ses = seq(-2,2,.1), Sex = levels(hs$Sex), Sector = levels(hs$Sector), Sector0 = levels(hs$Sector))
+#'   pred.d <- subset(pred.d, Sector > Sector0)
+#'   head(pred.d)
+#'   L <- Lfx(fit, list(
+#'          0,
+#'          0,
+#'          0 * ses,
+#'          0 * M(Sex),
+#'          0 * M(Sector),
+#'          0 * M(Sex),
+#'          0 * ses * M(Sex),
+#'          1 * M(Sector) - M(Sector0),
+#'          2 * ses * (M(Sector) - M(Sector0)),
+#'          0 * M(Sex) * M(Sector),
+#'          1 * M(Sex) * (M(Sector) - M(Sector0)),
+#'          2 * ses * M(Sex) * (M(Sector) - M(Sector0))),
+#'          pred.d)
+#'   w <- walddf(fit, L)
+#'   w
+#'   w <- sortdf(w, ~ Sex/ses)
+#'   xyplot(coef  ~ ses | Sex, w,
+#'      type = 'l',
+#'      auto.key = T,
+#'      fit = w$coef,
+#'      lower = w$L2,
+#'      upper = w$U2,
+#'      xlim = c(0,2),
+#'      ylab = 'effect of ses (Public minus Catholic)',
+#'      subscripts = T) +
+#'      layer(gpanel.fit(...)) +
+#'      layer(panel.abline(a=0,b=0,lwd = 1, color ='black'))
+#'
+#'
+
+
+
 #' }
 #' @export
 walddf <- function(fit, Llist = "", clevel = 0.95,
